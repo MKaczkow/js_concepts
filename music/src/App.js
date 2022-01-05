@@ -31,19 +31,15 @@ function App() {
     }
   ])
 
-    return (
-      <div className="app">
-        
-      </div>
-    );
-
-
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [nextSongIndex, setNextSongIndex] = useState(currentSongIndex + 1);
 
   return (
-    <div className="app">
-
+    <div className="App">
+      <Player 
+        song={songs[currentSongIndex]} 
+        nextSong={songs[nextSongIndex]} 
+      />
     </div>
   );
 
