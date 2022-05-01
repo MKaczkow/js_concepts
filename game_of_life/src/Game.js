@@ -1,9 +1,27 @@
 import React from 'react';
 import './Game.css';
 
+
 const CELL_SIZE = 20;
 const WIDTH = 800;
 const HEIGHT = 600;
+
+
+class Cell extends React.Component {
+
+    render() {
+        const { x, y } = this.props;
+        return (
+            <div className='Cell' style={{
+                left: `${CELL_SIZE*x + 1}px`,
+                top: `${CELL_SIZE*y + 1}px`,
+                width: `${CELL_SIZE - 1}px`,
+                height: `${CELL_SIZE - 1}px`,
+            }} />
+        );
+    }
+}
+
 
 class Game extends React.Component {
 
@@ -15,7 +33,11 @@ class Game extends React.Component {
         this.board = this.makeEmptyBoard();
     }
 
-    state = { cells: [], }
+    state = { 
+        cells: [], 
+        isRunning: false,
+        interval: 100
+    }
 
     makeEmptyBoard() {
         let board = [];
@@ -42,12 +64,50 @@ class Game extends React.Component {
         return cells;
     }
 
+    getElementOffset() {
+        const rect = this.boardRef.getBoundingClientRect();
+        const doc = document.documentElement;
+
+        return {
+            x: (rect.left + window.pageXOffset) - doc.clientLeft,
+            y: (rect.top + window.pageYOffset) - doc.clientTop,
+        };
+    }
+
+    handleClick = (event) => {
+        const elemOffset = this.getElementOffset();
+        const offsetX = event.clientX - elemOffset.x;
+        const offsetY = event.clientY - elemOffset.y;
+
+        const x = Math.floor(offsetX / CELL_SIZE);
+        const y = Math.floor(offsetY / CELL_SIZE);
+
+        if (x >= 0 && x <= this.cols && y >= 0 && y <= this.rows) {
+            this.board[y][x] = !this.board[y][x];
+        }
+
+        this.setState({ cells: this.makeCells() });
+    }
+
     render() {
+        const { cells, interval, isRunning } = this.state
         return(
             <div>
                 <div className="Board" 
-                    style={{ width: WIDTH, height: HEIGHT, backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px` }}>        
+                    style={{ width: WIDTH, height: HEIGHT, backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px` }}
+                    onClick={ this.handleClick }
+                    ref={(n) => { this.boardRef = n; }}>        
+
+                    {cells.map(cell => (
+                        <Cell x={cell.x} y={cell.y} key={`${cell.x},${cell.y}`}/>
+                        ))}
                 </div>      
+
+                <div className="Controls">
+                    <p>
+                        Controls go there...
+                    </p>
+                </div>
             </div>
         );
     }
