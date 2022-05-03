@@ -181,13 +181,15 @@ class Game extends React.Component {
                 </div>      
 
                 <div className="Controls">
+                    <p>
                     Update every <input value={this.state.interval} onChange={this.handleIntervalChange} /> msec
+                    </p>
                     { isRunning ? 
-                        <button className='button' onClick={this.stopGame}> Stop </button> :
-                        <button className='button' onClick={this.runGame}> Run </button>
-                    }
-                    <button className='button' onClick={this.handleRandom}> Random </button>
-                    <button className='button' onClick={this.handleClear}> Clear </button>
+                            <button type="button" class="btn btn-outline-dark" onClick={this.stopGame}>Stop</button> : 
+                            <button type="button" class="btn btn-outline-dark" onClick={this.runGame}>Run</button>
+                        }
+                        <button type="button" class="btn btn-outline-dark" onClick={this.handleRandom}>Random</button>
+                        <button type="button" class="btn btn-outline-dark" onClick={this.handleClear}>Clear</button>
                 </div>
             </div>
         );
